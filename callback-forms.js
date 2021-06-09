@@ -10,18 +10,22 @@ $(function () {
     // hide all error labels
     errorLabels.each(function () {
         $(this).hide();
+        console.log(this, ' is hidden');
     })
 
     // hide all cbForms but the first one
-    cbForms.each(function (index) {
+    $(cbForms).each(function (index) {
         if (index > 0) {
             $(this).hide();
+            console.log(this, ' is hidden');
         }
     })
 
     function validate(formInput, value) {
+        console.log(formInput, ', ', value);
         // find out the type of input (e.g. text, email, phone number)
         var type = formInput.getAttribute('type').trim();
+        console.log(type);
         let pattern;
         // declare regex expression based on the type of input
         switch (type) {
@@ -38,9 +42,11 @@ $(function () {
         // if the input matches the regex, hide the error message
         if (value.match(pattern) && value !== '') {
             $(formInput).siblings(errorLabels).hide();
+            console.log('true');
             return true;
         } else {
             $(formInput).siblings(errorLabels).show();
+            console.log('false');
             return false;
         }
     }
@@ -48,9 +54,12 @@ $(function () {
     // create event listener for each input and call validation function
     formInputs.each(function () {
         $(this).focusout(function () {
+            console.log(this, ' has focused out');
             var value = $(this).val().trim();
+            console.log('value: ', value);
             $(this).val(value);
-            validate(this, value);
+            var valid = validate(this, value);
+            console.log('valid?', valid);
         })
     })
 
@@ -110,21 +119,21 @@ $(function () {
 
 
 
-// when the form's submit button is clicked 
-$('.hack29-email-form').submit(function () {
-    // get reference to name field
-    const $name = $('#hack29-name-input');
-    // if the name field has a value
-    if ($.trim($name.val())) {
-        // find .hack28-custom-message and add this text 
-        $('.hack29-custom-message').text('Thank you ' + $name.val() + '!');
-        // then submit the form
-        return true;
-    }
-    else {	// else if no value
-        // enter default success message
-        $('.hack29-custom-message').text('Thank you! Your submission has been received!');
-        // then submit the form
-        return true;
-    }
-});
+// // when the form's submit button is clicked 
+// $('.hack29-email-form').submit(function () {
+//     // get reference to name field
+//     const $name = $('#hack29-name-input');
+//     // if the name field has a value
+//     if ($.trim($name.val())) {
+//         // find .hack28-custom-message and add this text 
+//         $('.hack29-custom-message').text('Thank you ' + $name.val() + '!');
+//         // then submit the form
+//         return true;
+//     }
+//     else {	// else if no value
+//         // enter default success message
+//         $('.hack29-custom-message').text('Thank you! Your submission has been received!');
+//         // then submit the form
+//         return true;
+//     }
+// });
