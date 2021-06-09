@@ -54,44 +54,44 @@ $(function () {
         })
     })
 
-    // run function when each of the multi-step form buttons are clicked
-    buttons.click(function () {
-        // get a reference to the current button's cb-card and generate a list of the inputs within it
-        var cbForm = $(this).closest(cbForms),
-            needValidating = $(cbForm).find(formInputs);
-        // declare boolean for whether or not to move on
-        var nextStep = true;
-        // run function for each of the form inputs
-        needValidating.each(function () {
-            // get the value of the input and check it for validity
-            var value = $(this).val();
-            var valid = validate(this, value);
-            // if it's not valid, change the nextStep variable to false
-            if (valid !== true) {
-                nextStep = false;
-            }
-        })
-        // get the index of the button and, therefore, the cbForm
-        var index = buttons.index(this);
-        // if nextStep is true and this is not the final step, show the next step
-        if (nextStep === true && index !== buttons.length - 1) {
-            cbForm.hide();
-            cbForms.eq(index + 1).show();
-        } else if (nextStep === true && index === buttons.length - 1) {
-            $('.is--cb-submit').click();
-            var firstName = $("input[name*='First Name']");
-        }
-    })
+    // // run function when each of the multi-step form buttons are clicked
+    // buttons.click(function () {
+    //     // get a reference to the current button's cb-card and generate a list of the inputs within it
+    //     var cbForm = $(this).closest(cbForms),
+    //         needValidating = $(cbForm).find(formInputs);
+    //     // declare boolean for whether or not to move on
+    //     var nextStep = true;
+    //     // run function for each of the form inputs
+    //     needValidating.each(function () {
+    //         // get the value of the input and check it for validity
+    //         var value = $(this).val();
+    //         var valid = validate(this, value);
+    //         // if it's not valid, change the nextStep variable to false
+    //         if (valid !== true) {
+    //             nextStep = false;
+    //         }
+    //     })
+    //     // get the index of the button and, therefore, the cbForm
+    //     var index = buttons.index(this);
+    //     // if nextStep is true and this is not the final step, show the next step
+    //     if (nextStep === true && index !== buttons.length - 1) {
+    //         cbForm.hide();
+    //         cbForms.eq(index + 1).show();
+    //     } else if (nextStep === true && index === buttons.length - 1) {
+    //         $('.is--cb-submit').click();
+    //         var firstName = $("input[name*='First Name']");
+    //     }
+    // })
 
-    // when a back button is clicked
-    backBtns.click(function () {
-        // get a reference to the current button's cb-card and find it's index
-        var cbForm = $(this).closest(cbForms),
-            index = cbForms.index(cbForm);
-        // hide the current cbForm and show the previous one
-        cbForm.hide();
-        cbForms.eq(index - 1).show();
-    })
+    // // when a back button is clicked
+    // backBtns.click(function () {
+    //     // get a reference to the current button's cb-card and find it's index
+    //     var cbForm = $(this).closest(cbForms),
+    //         index = cbForms.index(cbForm);
+    //     // hide the current cbForm and show the previous one
+    //     cbForm.hide();
+    //     cbForms.eq(index - 1).show();
+    // })
 })
 
 
