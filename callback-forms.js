@@ -2,9 +2,9 @@ $(function () {
     // declare variables
     // get a list of all error labels and needed form inputs
     const errorLabels = $('.form__lbl-wrapper.is--error'),
-        formInputs = $('.callback-form .form__input'),
-        buttons = $('.callback-form .cb-card .button'),
-        cbCards = $('.cb-card'),
+        formInputs = $('.cb-card .form__input'),
+        buttons = $('.cb-card .button.is--small'),
+        cbForms = $('.form-block.is--cb'),
         backBtns = $('a:contains("Back")').filter(function (index) { return $(this).text() === "Back"; });
 
     // hide all error labels
@@ -12,8 +12,8 @@ $(function () {
         $(this).hide();
     })
 
-    // hide all cbCards but the first one
-    cbCards.each(function (index) {
+    // hide all cbForms but the first one
+    cbForms.each(function (index) {
         if (index > 0) {
             $(this).hide();
         }
@@ -57,8 +57,8 @@ $(function () {
     // run function when each of the multi-step form buttons are clicked
     buttons.click(function () {
         // get a reference to the current button's cb-card and generate a list of the inputs within it
-        var cbCard = $(this).closest(cbCards),
-            needValidating = $(cbCard).find(formInputs);
+        var cbForm = $(this).closest(cbForms),
+            needValidating = $(cbForm).find(formInputs);
         // declare boolean for whether or not to move on
         var nextStep = true;
         // run function for each of the form inputs
@@ -71,12 +71,12 @@ $(function () {
                 nextStep = false;
             }
         })
-        // get the index of the button and, therefore, the cbCard
+        // get the index of the button and, therefore, the cbForm
         var index = buttons.index(this);
         // if nextStep is true and this is not the final step, show the next step
         if (nextStep === true && index !== buttons.length - 1) {
-            cbCard.hide();
-            cbCards.eq(index + 1).show();
+            cbForm.hide();
+            cbForms.eq(index + 1).show();
         } else if (nextStep === true && index === buttons.length - 1) {
             $('.is--cb-submit').click();
             var firstName = $("input[name*='First Name']");
@@ -86,11 +86,11 @@ $(function () {
     // when a back button is clicked
     backBtns.click(function () {
         // get a reference to the current button's cb-card and find it's index
-        var cbCard = $(this).closest(cbCards),
-            index = cbCards.index(cbCard);
-        // hide the current cbCard and show the previous one
-        cbCard.hide();
-        cbCards.eq(index - 1).show();
+        var cbForm = $(this).closest(cbForms),
+            index = cbForms.index(cbForm);
+        // hide the current cbForm and show the previous one
+        cbForm.hide();
+        cbForms.eq(index - 1).show();
     })
 })
 
