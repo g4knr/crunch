@@ -7,7 +7,7 @@ WEBFLOW
 **********
 */
 
-// recieve pardot data
+// recieve pardot data and action
 window.addEventListener(
 	"message",
 	(event) => {
