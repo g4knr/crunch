@@ -2,48 +2,6 @@
 
 /*
 **********
-PARDOT FORMS
-SUCCESS
-**********
-*/
-
-window.addEventListener(
-	"message",
-	(event) => {
-		if (!event.origin.includes("https://www.crunch.uk")) {
-			return;
-		}
-
-		const pardotMessage = event.data;
-
-		if (pardotMessage[0] === "pardotFormSuccess") {
-			console.log(pardotMessage);
-			const pardotForm = pardotMessage[1];
-			console.log(pardotForm);
-
-			window.dataLayer = window.dataLayer || [];
-			window.dataLayer.push({
-				event: "pardotFormSuccess",
-				pardotForm: pardotForm
-			});
-		}
-	},
-	false
-);
-
-// resize iframe
-let iframe = document.querySelector("#form__iframe");
-window.addEventListener(
-	"message",
-	function (e) {
-		let message = e.data;
-		iframe.style.height = message + "px";
-	},
-	false
-);
-
-/*
-**********
 RTAP PREP
 **********
 */
