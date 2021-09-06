@@ -1,6 +1,45 @@
 /* CRUNCH */
 
-//changes coming
+/*
+**********
+PARDOT FORMS
+WEBFLOW
+**********
+*/
+
+// recieve pardot data
+window.addEventListener(
+	"message",
+	(event) => {
+		if (!event.origin.includes("https://www.crunch.uk")) {
+			return;
+		}
+
+		const pardotMessage = event.data;
+		console.log(`pardotMessage: ${pardotMessage.name}`);
+
+		if (pardotMessage.name === "iframeHeight") {
+			let iframe = document.querySelector(".form__iframe");
+			iframe.style.height = `${pardotMessage.height}px`;
+		} else if (pardotMessage.name === "pardotFormSuccess") {
+			window.dataLayer = window.dataLayer || [];
+			window.dataLayer.push({
+				event: "pardotFormSuccess",
+				pardotForm: pardotMessage.formName
+			});
+		}
+	},
+	false
+);
+
+// modal configuration
+$(".is--callback").click(function () {
+	$(".modal__wrapper.is--main").css("pointer-events", "auto");
+});
+
+$(".is--sub-callback").click(function () {
+	$(".modal__wrapper.is--sub").css("pointer-events", "auto");
+});
 
 /*
 **********
