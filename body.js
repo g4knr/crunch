@@ -11,22 +11,22 @@ WEBFLOW
 window.addEventListener(
 	"message",
 	(event) => {
-		if (!event.origin.includes("https://www.crunch.uk")) {
-			return;
-		}
-
-		const pardotMessage = event.data;
-		console.log(`pardotMessage: ${pardotMessage.name}`);
-
-		if (pardotMessage.name === "iframeHeight") {
-			let iframe = document.querySelector(".form__iframe");
-			iframe.style.height = `${pardotMessage.height}px`;
-		} else if (pardotMessage.name === "pardotFormSuccess") {
-			window.dataLayer = window.dataLayer || [];
-			window.dataLayer.push({
-				event: "pardotFormSuccess",
-				pardotForm: pardotMessage.formName
-			});
+		if (
+			event.origin.includes("https://www.crunch.uk") ||
+			event.origin.includes("https://crunch-2021.webflow.io")
+		) {
+			const pardotMessage = event.data;
+			
+			if (pardotMessage.name === "iframeHeight") {
+				let iframe = document.querySelector(".form__iframe");
+				iframe.style.height = `${pardotMessage.height}px`;
+			} else if (pardotMessage.name === "pardotFormSuccess") {
+				window.dataLayer = window.dataLayer || [];
+				window.dataLayer.push({
+					event: "pardotFormSuccess",
+					pardotForm: pardotMessage.formName
+				});
+			}
 		}
 	},
 	false
