@@ -185,8 +185,8 @@ CALLBACK FORMS
 $(function () {
   // cycle through the modal wrappers (normally just one but there are multiple on some pages)
   $(".modal__wrapper").each(function () {
-    // find the ID of the form and check if it has the class 'is--main'
-    let formId = $(this).find("form").attr("id"),
+    // find the select ID of the iframe and check if the modal has the class 'is--main'
+    let selectId = $(this).find("iframe").attr("data-gtm-select"),
       modalClass = $(this).hasClass("is--main"),
       callbackClass = "";
 
@@ -205,7 +205,7 @@ $(function () {
 
     // apply the gtm attribute to the triggers
     $(callbackClass).each(function () {
-      $(this).attr("data-gtm-select", formId);
+      $(this).attr("data-gtm-select", selectId);
     });
   });
 });
