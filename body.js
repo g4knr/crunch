@@ -20,6 +20,7 @@ window.addEventListener(
 			if (pardotMessage.name === "iframeHeight") {
 				let iframe = document.querySelector(".form__iframe");
 				iframe.style.height = `${pardotMessage.height}px`;
+				$('.modal__wrapper').css('z-index', '999999').css('opacity', '1');
 			} else if (pardotMessage.name === "pardotFormSuccess") {
 				window.dataLayer = window.dataLayer || [];
 				window.dataLayer.push({
@@ -31,15 +32,6 @@ window.addEventListener(
 	},
 	false
 );
-
-// modal configuration
-$(".is--callback").click(function () {
-	$(".modal__wrapper.is--main").css("pointer-events", "auto");
-});
-
-$(".is--sub-callback").click(function () {
-	$(".modal__wrapper.is--sub").css("pointer-events", "auto");
-});
 
 /*
 **********
