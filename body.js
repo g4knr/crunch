@@ -20,7 +20,7 @@ window.addEventListener(
 			if (pardotMessage.name === "iframeHeight") {
 				let iframe = document.querySelector(".form__iframe");
 				iframe.style.height = `${pardotMessage.height}px`;
-				$('.modal__wrapper').css('z-index', '999999').css('opacity', '1');
+				$('.modal__wrapper').css('display', 'none').css('z-index', '999999').css('opacity', '1');
 			} else if (pardotMessage.name === "pardotFormSuccess") {
 				window.dataLayer = window.dataLayer || [];
 				window.dataLayer.push({
