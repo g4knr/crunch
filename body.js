@@ -141,35 +141,6 @@ window.addEventListener("resize", updateNav);
 
 /*
 **********
-HERO 3
-**********
-*/
-
-// determine the hight of the wave for 'hero3'
-function heroThree(isMobile) {
-  const heroShape = $(".hero3__shape");
-  if (isMobile.matches) {
-    let newHeight = $(heroShape)
-      .siblings(".hero__wrapper")
-      .find(".hero__content")
-      .height();
-    $(heroShape).css("height", `calc(${newHeight}px + 12em - 2px)`);
-  }
-}
-
-// find the viewport size and whether the page includes 'hero3'
-var isMobile = window.matchMedia("(max-width: 767px)");
-const hero3 = $(".hero3__shape");
-
-// if its included, run function and listen out for change in screen size
-if (hero3.length > 0) {
-  heroThree(isMobile); // Call function at start
-  isMobile.addListener(heroThree); // Attach listener function on state changes
-}
-/* END */
-
-/*
-**********
 CALLBACK FORMS
 **********
 */
