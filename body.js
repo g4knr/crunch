@@ -141,6 +141,92 @@ window.addEventListener("resize", updateNav);
 
 /*
 **********
+EXTERNAL SCRIPTS
+**********
+*/
+
+function loadLink(href) {
+	const tag = document.createElement("link");
+	tag.rel = "stylesheet";
+	tag.href = href;
+	document.head.appendChild(tag);
+}
+
+function createCode(type, code) {
+	let tag;
+
+	if (type === "css") {
+		tag = document.createElement("style");
+		tag.innerHTML = code;
+		document.head.appendChild(tag);
+	} else if (type === "script") {
+		tag = document.createElement("script");
+		tag.innerHTML = code;
+		document.body.appendChild(tag);
+	}
+}
+
+function loadScript(codeLocation, src, script) {
+	const tag = document.createElement("script");
+	tag.src = src;
+	console.log(script);
+	if (script !== null) {
+		tag.onload = function() {
+			createCode("script", script);
+		};
+	}
+
+	if (codeLocation === "head") {
+		document.head.appendChild(tag);
+	} else {
+		document.body.appendChild(tag);
+	}
+}
+
+function memberQuote() {
+	const quotes = document.getElementsByClassName("splide is--quotes");
+	if (quotes.length > 0) {
+		const script = `function memberQuotes(){let quotes=$(".splide");for(let i=0,quotesNum=quotes.length;i<quotesNum;i++){new Splide(quotes[i],{perPage:3,perMove:1,focus:"center",type:"loop",gap:"4em",fixedWidth:"39em",arrows:!1,pagination:"slider",speed:350,dragAngleThreshold:30,autoWidth:!1,rewind:!0,rewindSpeed:700,waitForTransition:!1,updateOnMove:!0,trimSpace:!1,breakpoints:{767:{perPage:1},479:{perPage:1,fixedWidth:"90vw"}}}).mount()}}
+    memberQuotes()`;
+		loadLink(
+			"https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"
+		);
+		createCode(
+			"css",
+			`.splide__pagination__page{background:#BFC6CB!important;width:10px;height:10px}.splide__pagination__page.is-active{background:#FC125E!important;transform:scale(1)}`
+		);
+		loadScript(
+			"body",
+			"https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js",
+			script
+		);
+	}
+}
+
+function tooltips() {
+	const tooltip = document.getElementsByClassName("tooltip");
+	const pricingTooltip = document.querySelectorAll(
+		".pricing__feature .secondary-text"
+	);
+
+	const runFunction = tooltip.length > 0 || pricingTooltip.length > 0;
+	console.log(runFunction)
+
+	if (runFunction) {
+		const script = `$(function(){const pricingTooltip=$(".pricing__feature .secondary-text");tippy(".tooltip",{theme:"crunch",arrow:document.getElementById("tippy-svg"),zIndex:9999999});if(pricingTooltip){tippy(".pricing__feature .secondary-text",{theme:"crunch",allowHTML:!0,arrow:document.getElementById("tippy-svg"),interactive:!0,content:(reference)=>$(reference).siblings(".tooltip__content").html()})}})`;
+		createCode(
+			"css",
+			`.tippy-box[data-theme~='crunch']{background-color:#fff;color:#2e3138;padding:1.5em;border:1px solid #bfc6cb;border-radius:.375em;box-shadow:0 3px 6px 0 hsla(221.99999999999997,9.8%,20%,.16)}`
+		);
+		loadScript("body", "https://unpkg.com/@popperjs/core@2", null);
+		loadScript("body", "https://unpkg.com/tippy.js@6", script);
+	}
+}
+
+/* END */
+
+/*
+**********
 CALLBACK FORMS
 **********
 */
