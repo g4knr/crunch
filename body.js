@@ -223,6 +223,9 @@ function tooltips() {
 	}
 }
 
+memberQuote()
+tooltips()
+
 /* END */
 
 /*
