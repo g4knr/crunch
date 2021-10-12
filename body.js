@@ -169,7 +169,6 @@ function createCode(type, code) {
 function loadScript(codeLocation, src, script) {
 	const tag = document.createElement("script");
 	tag.src = src;
-	console.log(script);
 	if (script !== null) {
 		tag.onload = function() {
 			createCode("script", script);
@@ -210,7 +209,6 @@ function tooltips() {
 	);
 
 	const runFunction = tooltip.length > 0 || pricingTooltip.length > 0;
-	console.log(runFunction)
 
 	if (runFunction) {
 		const script = `$(function(){const pricingTooltip=$(".pricing__feature .secondary-text");tippy(".tooltip",{theme:"crunch",arrow:document.getElementById("tippy-svg"),zIndex:9999999});if(pricingTooltip){tippy(".pricing__feature .secondary-text",{theme:"crunch",allowHTML:!0,arrow:document.getElementById("tippy-svg"),interactive:!0,content:(reference)=>$(reference).siblings(".tooltip__content").html()})}})`;
