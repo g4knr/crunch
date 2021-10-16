@@ -8,7 +8,7 @@ WEBFLOW
 */
 
 // check if the page has a pardot form on it
-const pardotForms = document.querySelectorAll('.modal__wrapper iframe');
+const pardotForms = document.querySelectorAll(".modal__wrapper iframe");
 
 if (pardotForms.length > 0) {
 	// there is a pardot form
@@ -21,11 +21,18 @@ if (pardotForms.length > 0) {
 				event.origin.includes("https://crunch-2021.webflow.io")
 			) {
 				const pardotMessage = event.data;
-				
+
 				if (pardotMessage.name === "iframeHeight") {
 					let iframe = document.querySelector(".form__iframe");
-					iframe.style.height = `${pardotMessage.height}px`;
-					$('.modal__wrapper').css('display', 'none').css('z-index', '999999').css('opacity', '1');
+					let iframeHeight = pardotMessage.height;
+					if (iframeHeight < 400) {
+						iframeHeight = 400;
+					}
+					iframe.style.height = `${iframeHeight}px`;
+					$(".modal__wrapper")
+						.css("display", "none")
+						.css("z-index", "999999")
+						.css("opacity", "1");
 				} else if (pardotMessage.name === "pardotFormSuccess") {
 					window.dataLayer = window.dataLayer || [];
 					window.dataLayer.push({
@@ -40,7 +47,10 @@ if (pardotForms.length > 0) {
 } else {
 	// there is no pardot form
 	// format the site
-	$('.modal__wrapper').css('display', 'none').css('z-index', '999999').css('opacity', '1');
+	$(".modal__wrapper")
+		.css("display", "none")
+		.css("z-index", "999999")
+		.css("opacity", "1");
 }
 
 /*
