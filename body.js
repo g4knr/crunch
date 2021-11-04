@@ -709,6 +709,85 @@ $(function () {
 
 /*
 **********
+FAB & LIVEAGENT
+**********
+*/
+
+function fab() {
+	const fabWrapper = document.getElementsByClassName("fab__wrapper")[0];
+	const fab = document.getElementsByClassName("fab")[0];
+	const fabItem = document.getElementsByClassName("fab__item");
+	const fabClose = document.getElementsByClassName("fab__close")[0];
+	const fabPhone = document.getElementById("fab-phone");
+	const fabChat = document.getElementById("fab-chat");
+
+	function fabRTap() {
+		const rTapDetails = $(".rtap-details"),
+			rTapType = $(rTapDetails).attr("data-rtap-type"),
+			rTapId = $(rTapDetails).attr("data-rtap-id"),
+			rTapFallback = $(rTapDetails).attr("data-rtap-fallback");
+
+		if (rTapType === "Dynamic") {
+			$(fabPhone).click(function () {
+				rTapClickToCall(rTapId);
+			});
+		} else {
+			$(fabPhone).click(function () {
+				window.open(`tel:${rTapFallback}`);
+			});
+		}
+	}
+
+	fabRTap();
+
+	$(fab).click(function () {
+		$(fabWrapper).toggleClass("is--open");
+	});
+
+	$(fabClose).click(function () {
+		$(fabWrapper).toggleClass("is--open");
+	});
+
+	$(fabItem).click(function () {
+		$(fabWrapper).toggleClass("is--open");
+	});
+
+	const onlineBtn = document.getElementById(
+		"liveagent_button_online_5732o000000c2Ud"
+	);
+	const offlineBtn = document.getElementById(
+		"liveagent_button_offline_5732o000000c2Ud"
+	);
+
+	onlineBtn.addEventListener("click", function () {
+		liveagent.startChat("5732o000000c2Ud");
+	});
+
+	if (!window._laq) {
+		window._laq = [];
+	}
+	window._laq.push(function () {
+		liveagent.showWhenOnline(
+			"5732o000000c2Ud",
+			document.getElementById("liveagent_button_online_5732o000000c2Ud")
+		);
+		liveagent.showWhenOffline(
+			"5732o000000c2Ud",
+			document.getElementById("liveagent_button_offline_5732o000000c2Ud")
+		);
+	});
+
+	liveagent.init(
+		"https://d.la1-c1-cdg.salesforceliveagent.com/chat",
+		"5722o000000c227",
+		"00D1t000000Fntp"
+	);
+}
+
+fab();
+
+/*
+**********
 LINKS
 **********
 */
