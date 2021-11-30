@@ -237,7 +237,8 @@ async function tooltips() {
 			`.tippy-box[data-theme~='crunch']{background-color:#fff;color:#2e3138;padding:1.5em;border:1px solid #bfc6cb;border-radius:.375em;box-shadow:0 3px 6px 0 hsla(221.99999999999997,9.8%,20%,.16)}`
 		);
 		await loadScript("body", "https://unpkg.com/@popperjs/core@2", null);
-		await loadScript("body", "https://unpkg.com/tippy.js@6", script);
+		await loadScript("body", "https://unpkg.com/tippy.js@6", null);
+		await createCode("script", script);
 	}
 }
 
