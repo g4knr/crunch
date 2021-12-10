@@ -242,8 +242,10 @@ async function tooltips() {
 	}
 }
 
-memberQuote();
-tooltips();
+document.addEventListener('DOMContentLoaded', function() {
+	memberQuote();
+	tooltips();
+})
 
 /* END */
 
