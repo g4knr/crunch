@@ -18,6 +18,7 @@ if (pardotForms.length > 0) {
 		(event) => {
 			if (
 				event.origin.includes("https://www.crunch.uk") ||
+				event.origin.includes("https://www.crunch.co.uk") ||
 				event.origin.includes("https://crunch-2021.webflow.io")
 			) {
 				const pardotMessage = event.data;
