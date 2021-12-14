@@ -101,7 +101,7 @@ function isTablet() {
 	let isScreen = window.matchMedia("(min-width: 992px)").matches;
 
 	if (isScreen) {
-		if (userAgent.indexOf("Safari") > -1) {
+		if (userAgent.indexOf("safari") > -1) {
 			return (
 				"ontouchstart" in window ||
 				navigator.maxTouchPoints > 0 ||
