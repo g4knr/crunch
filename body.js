@@ -800,6 +800,11 @@ function crunchForms() {
 					// assign the values to the text input
 					radioGroupInput.id = selectedRadioId;
 					radioGroupInput.name = selectedRadioId;
+					
+					// reset the selected radio
+					selectedRadio.removeAttribute("name");
+					selectedRadio.removeAttribute("id");
+					selectedRadio.removeAttribute("value");
 				});
 
 				// find the name field and determine the next step
