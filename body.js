@@ -23,18 +23,7 @@ if (pardotForms.length > 0) {
 			) {
 				const pardotMessage = event.data;
 
-				if (pardotMessage.name === "iframeHeight") {
-					let iframe = document.querySelector(".form__iframe");
-					let iframeHeight = pardotMessage.height;
-					if (iframeHeight < 400) {
-						iframeHeight = 400;
-					}
-					iframe.style.height = `${iframeHeight}px`;
-					$(".modal__wrapper")
-						.css("display", "none")
-						.css("z-index", "999999")
-						.css("opacity", "1");
-				} else if (pardotMessage.name === "pardotFormSuccess") {
+				if (pardotMessage.name === "pardotFormSuccess") {
 					window.dataLayer = window.dataLayer || [];
 					window.dataLayer.push({
 						event: "pardotFormSuccess",
@@ -45,13 +34,6 @@ if (pardotForms.length > 0) {
 		},
 		false
 	);
-} else {
-	// there is no pardot form
-	// format the site
-	$(".modal__wrapper")
-		.css("display", "none")
-		.css("z-index", "999999")
-		.css("opacity", "1");
 }
 
 /*
@@ -311,317 +293,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /*
 **********
-CALLBACK FORMS
-**********
-*/
-
-$(function () {
-	// cycle through the modal wrappers (normally just one but there are multiple on some pages)
-	$(".modal__wrapper").each(function () {
-		// find the select ID of the iframe and check if the modal has the class 'is--main'
-		let selectId = $(this).find("iframe").attr("data-gtm-select"),
-			modalClass = $(this).hasClass("is--main"),
-			callbackClass = "";
-
-		// if it has 'is--main' the trigger must have the class 'is--callback'
-		// if not, it has class 'is--sub-callback'
-		switch (modalClass) {
-			case true:
-				callbackClass = $(".is--callback");
-				break;
-			case false:
-				callbackClass = $(".is--sub-callback");
-				break;
-			default:
-				break;
-		}
-
-		// apply the gtm attribute to the triggers
-		$(callbackClass).each(function () {
-			$(this).attr("data-gtm-select", selectId);
-		});
-	});
-});
-
-$(function () {
-	// declare variables
-	// get a list of all error labels and needed form inputs
-	const cbFormClass = ".callback-form",
-		cbForms = $(cbFormClass),
-		errorLabels = $(".form__lbl-wrapper.is--error"),
-		formInputs = $(`${cbFormClass} .form__input`),
-		radioGroups = $(".radio__group"),
-		radioElement = $(".form__radio-element"),
-		buttons = $(`${cbFormClass} .button.is--validate`),
-		cbCards = $(".cb-card"),
-		backBtns = $('a:contains("Back")').filter(function (index) {
-			return $(this).text() === "Back";
-		});
-
-	// hide all cbCards but the first one
-	cbForms.each(function () {
-		const formCards = $(this).find(cbCards);
-		formCards.each(function (index) {
-			if (index > 0) {
-				$(this).hide();
-			}
-		});
-	});
-
-	// hide all error labels
-	errorLabels.each(function () {
-		$(this).hide();
-	});
-
-	// ensure the inputs linked to radio buttons are hidden and not required
-	radioGroups.each(function () {
-		var input = $(this).find(".form__input-wrapper");
-		$(input).hide();
-		$(input).find("input").prop("required", false);
-	});
-
-	// when a radio element is clicked, hide the error labels relating to the group, hide any text inputs and set them to not required
-	$(radioElement).click(function () {
-		var parentGroup = $(this).closest(radioGroups);
-		$(parentGroup).siblings(errorLabels).hide();
-		var radioInputWrapper = $(parentGroup).find(".form__input-wrapper"),
-			radioInput = $(radioInputWrapper).find("input");
-		$(radioInputWrapper).hide();
-		$(radioInput).prop("required", false);
-
-		// get the element proceeding the clicked radio button and, if it's a text input, show it and set it to required
-		var nextEl = $(this).next();
-		if ($(nextEl).hasClass("form__input-wrapper")) {
-			$(nextEl).find(".form__input").prop("required", true);
-			$(nextEl).show();
-		}
-	});
-
-	// create a function to show the button loading animation
-	function loadingAnim(button, action) {
-		// declare the base values
-		let text = "0",
-			loading = "1",
-			buttonOpacity = "0.8",
-			events = "none";
-
-		// if the function should hide the animation, update the values
-
-		if (action === "hide") {
-			text = "1";
-			loading = "0";
-			buttonOpacity = "1";
-			events = "auto";
-		}
-
-		// apply the values
-		$(button).find(".button__text").css("opacity", text);
-		$(button).find(".button__loading").css("opacity", loading);
-		$(button).css("opacity", buttonOpacity).css("pointer-events", events);
-	}
-
-	// create a function to validate the form inputs
-	function validateInputs(formInput, value) {
-		// find out the type of input (e.g. text, email, phone number)
-		var type = formInput.getAttribute("type"),
-			required = $(formInput).prop("required");
-		let pattern;
-		// declare regex expression based on the type of input
-		switch (type) {
-			case "text":
-				// can include anything
-				pattern = /^(?!\s*$).+/;
-				break;
-			case "email":
-				// pulled from https://stackoverflow.com/questions/201323/how-can-i-validate-an-email-address-using-a-regular-expression
-				pattern = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-				break;
-			case "tel":
-				// pulled from https://stackoverflow.com/questions/11518035/regular-expression-for-gb-based-and-only-numeric-phone-number#:~:text=Also%20note%20you%20have%20got,should%20always%20be%20a%200.&text=UK%20phone%20numbers%20usually%20have,code%20or%20%2B44%20country%20code.
-				pattern = /^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/;
-				break;
-			case "textarea":
-				// can inlcude anything
-				pattern = /^(?!\s*$).+/;
-				break;
-			default:
-				// default to anything
-				pattern = /^(?!\s*$).+/;
-				break;
-		}
-
-		if (value.match(pattern) && value !== "") {
-			// if the input matches the regex, hide the error message and return true
-			$(formInput).siblings(errorLabels).hide();
-			return true;
-		} else if (value === "" && required === false) {
-			// if the value is empty but it's not required, hide the error message and return true
-			$(formInput).siblings(errorLabels).hide();
-			return true;
-		} else {
-			// for anything else, show the error message and return false
-			$(formInput).siblings(errorLabels).show();
-			return false;
-		}
-	}
-
-	// create a function to validate the radio inputs
-	function validateRadios(radioGroup) {
-		if ($(radioGroup).find(".w--redirected-checked").length === 0) {
-			// if there is no option selected, show an error and return false
-			$(radioGroup).siblings(errorLabels).show();
-			return false;
-		} else {
-			// hide any errors and return true
-			$(radioGroup).siblings(errorLabels).hide();
-			return true;
-		}
-	}
-
-	// create a function to check the reCAPTCHA has been completed
-	function verifyRecaptcha(recaptchaId) {
-		var response = grecaptcha.getResponse(recaptchaId);
-		let proceed = false;
-		if (response !== "") {
-			proceed = true;
-		}
-
-		return proceed;
-	}
-
-	// create event listener for each input and call validation function whenever the user leaves the input
-	formInputs.each(function () {
-		$(this).focusout(function () {
-			var value = $(this).val().trim();
-			$(this).val(value);
-			validateInputs(this, value);
-		});
-	});
-
-	// run function when each of the multi-step form buttons are clicked
-	buttons.click(function () {
-		// show the loading anim
-		loadingAnim(this, "show");
-
-		// get a reference to the current button's cb-card and generate a list of the inputs within it
-		var cbCard = $(this).closest(cbCards),
-			inputsToValidate = $(cbCard)
-				.find(formInputs)
-				.filter("[required]:visible"),
-			radiosToValidate = $(cbCard).find(radioGroups);
-
-		// declare boolean for whether or not to move on, default to true
-		var nextStep = true;
-
-		// run a function for each of the form inputs
-		inputsToValidate.each(function () {
-			// get the value of the input and check it for validity
-			var value = $(this).val();
-			var inputValid = validateInputs(this, value);
-			// if it's not valid, set the nextStep variable to false
-			if (inputValid !== true) {
-				nextStep = false;
-			}
-		});
-
-		// if there are any radio groups, look through each group and validate it
-		if (radiosToValidate.length !== 0) {
-			$(radioGroups).each(function () {
-				var radioValid = validateRadios(this);
-
-				// if it's not valid, set the nextStep variable to false
-				if (radioValid !== true) {
-					nextStep = false;
-				}
-			});
-		}
-
-		// get a reference to the reCAPTCHA element
-		var recaptcha = $(".g-recaptcha");
-
-		// if the current step includes a reCAPTCHa, verify that it has been completed and not timed out
-		if ($(cbCard).find(recaptcha).length !== 0) {
-			var recaptchaResponse = verifyRecaptcha();
-
-			// if it's true, hide it's error label
-			// if it's false, show the error label and set nextStep to false
-			if (recaptchaResponse === true) {
-				$(recaptcha).siblings(errorLabels).hide();
-			} else {
-				$(recaptcha).siblings(errorLabels).show();
-				nextStep = false;
-			}
-		}
-
-		// get the index of the button and, therefore, the cbCard
-		var currentForm = $(this).closest("form"),
-			formBtns = $(currentForm).find(buttons),
-			index = $(formBtns).index(this);
-
-		if (nextStep === true && index !== formBtns.length - 1) {
-			// if nextStep is true and this is not the final step, show the next step
-			cbCard.hide();
-			cbCard.closest(".form__step").next().find(cbCards).show();
-			// hide the loading anim
-			loadingAnim(this, "hide");
-		} else if (nextStep === true && index === formBtns.length - 1) {
-			// otherwise, if nextStep is true and it is the final step
-
-			// format the checkboxes for Pardot
-			const formCheckboxes = $(currentForm).find(".form__checkbox-wrapper");
-
-			formCheckboxes.each(function () {
-				let cbId = $(this).attr("id"),
-					cbInput = $(this).next(".form__hidden-input").find("input"),
-					status = $(this).find("input").is(":checked");
-				if (cbId !== "") {
-					$(cbInput).attr("id", cbId).val(status);
-				}
-
-				$(this).attr("id", "");
-				$(this).find("input").attr("id", "");
-			});
-
-			// format the radio groups for Pardot
-			$(radioGroups).each(function () {
-				let selectedRadio = $(this).find(":checked"),
-					radioId = $(selectedRadio).attr("id"),
-					hiddenInput = $(this).siblings(".form__radio-submit").find("input");
-				$(hiddenInput).attr("id", radioId).attr("name", radioId);
-			});
-
-			// find the _gotcha field and determine next steps
-			const userName = $(cbCard).find("input[name=name]");
-
-			if ($(userName).val() !== "") {
-				$(currentForm).attr(
-					"action",
-					"https://www.crunch.uk/l/264772/2021-07-22/rhnlf"
-				);
-			}
-
-			// submit the form
-			$(this).siblings(".is--cb-submit").click();
-		} else {
-			// verification failed
-			loadingAnim(this, "hide");
-		}
-	});
-
-	// when a back button is clicked
-	backBtns.click(function () {
-		// get a reference to the current button's cb-card and find it's index
-		var cbCard = $(this).closest(cbCards),
-			index = cbCards.index(cbCard);
-		// hide the current cbCard and show the previous one
-		cbCard.hide();
-		cbCards.eq(index - 1).show();
-	});
-});
-/* END */
-
-/*
-**********
 NEWSLETTER FORMS
 **********
 */
@@ -833,3 +504,348 @@ $(function () {
 	});
 });
 /* END */
+
+/*
+**********
+CALLBACK FORMS
+**********
+*/
+
+/*
+function to format callback triggers for google analytics
+*/
+
+function formatCallbackTriggers() {
+	// find all modal wrappers and loop through them
+	const modalWrappers = document.querySelectorAll(".modal__wrapper");
+	modalWrappers.forEach((modalWrapper) => {
+		// find the name of the form and what level of form it is
+		// e.g. main or sub
+		const modalFormSelector = modalWrapper.querySelector("form")
+				? "form"
+				: "iframe",
+			gtmSelectSelector =
+				modalFormSelector === "form" ? "data-name" : "data-gtm-select";
+
+		const modalForm = modalWrapper.querySelector(modalFormSelector),
+			gtmSelect = modalForm.getAttribute(gtmSelectSelector),
+			isMain = modalWrapper.classList.contains("is--main"),
+			isFooter = modalWrapper.classList.contains("is--footer"),
+			callbackClass = isMain
+				? ".is--callback"
+				: isFooter
+				? ".is--footer-callback"
+				: ".is--sub-callback";
+
+		// find all items with the 'is--callback' or 'is--sub-callback'
+		// append the gtm select attribute
+		document.querySelectorAll(callbackClass).forEach((item) => {
+			item.setAttribute("data-gtm-select", gtmSelect);
+		});
+	});
+}
+
+/*
+function to prepare the forms
+*/
+
+function crunchForms() {
+	// declare selectors
+	const modalWrapperSelector = ".modal__wrapper",
+		callbackFormSelector = ".callback-form",
+		formStepsSelector = `${callbackFormSelector}__step`,
+		errorLabelsSelector = ".form__lbl-wrapper.is--error",
+		formInputsSelector = `${callbackFormSelector} .form__input`,
+		radioGroupsSelector = `${callbackFormSelector} .radio__group`,
+		radioElementsSelector = `${callbackFormSelector} .form__radio-element`,
+		validateButtonsSelector = `${callbackFormSelector} .button.is--validate`,
+		backButtonsSelector = `${callbackFormSelector} [data-form-el="back-button"]`,
+		inputWrapperSelector = ".form__input-wrapper";
+
+	// reference elements
+	const callbackForms = document.querySelectorAll(callbackFormSelector),
+		formSteps = document.querySelectorAll(formStepsSelector),
+		errorLabels = document.querySelectorAll(errorLabelsSelector),
+		formInputs = document.querySelectorAll(formInputsSelector),
+		radioGroups = document.querySelectorAll(radioGroupsSelector),
+		radioElements = document.querySelectorAll(radioElementsSelector),
+		validateButtons = document.querySelectorAll(validateButtonsSelector),
+		backButtons = document.querySelectorAll(backButtonsSelector);
+
+	/*
+	define reusable functions
+	*/
+
+	// function to hide or show text input errors
+	function formInputErrors(formInput, valid) {
+		const errorLabel = formInput.parentElement.querySelector(
+			errorLabelsSelector
+		);
+
+		if (valid && errorLabel) {
+			errorLabel.style.display = "none";
+		} else {
+			errorLabel.style.removeProperty("display");
+		}
+	}
+
+	// function to reset a given radio group
+	function resetRadioGroup(radioGroup) {
+		const radioGroupParent = radioGroup.parentElement;
+		const radioGroupErrors = radioGroupParent.querySelectorAll(
+			errorLabelsSelector
+		);
+
+		// hide the error labels
+		radioGroupErrors.forEach((errorLabel) => {
+			errorLabel.style.display = "none";
+		});
+
+		// hide the linked text input
+		const radioInputs = radioGroup.querySelectorAll(inputWrapperSelector);
+		radioInputs.forEach((radioInput) => {
+			radioInput.style.display = "none";
+			radioInput.querySelector("input").required = false;
+		});
+	}
+
+	// function to show the loading animation
+	function loadingAnim(button, show) {
+		// declare the values
+		const text = show ? "0" : "1",
+			loading = show ? "1" : "0",
+			buttonOpacity = show ? "0.8" : "1",
+			events = show ? "none" : "auto";
+
+		// apply the values
+		button.querySelector(".button__text").style.opacity = text;
+		button.querySelector(".button__loading").style.opacity = loading;
+		button.style.opacity = buttonOpacity;
+		button.style.pointerEvents = events;
+	}
+
+	/*
+	prep the form
+	*/
+
+	// hide all but the first step of each form
+	formSteps.forEach((step) => {
+		const parentForm = step.parentElement;
+		if (step !== parentForm.firstChild) {
+			step.style.display = "none";
+		}
+	});
+
+	// hide all error labels
+	errorLabels.forEach((errorLabel) => {
+		errorLabel.style.display = "none";
+	});
+
+	// ensure the inputs linked to radio buttons are hidden and not required
+	radioGroups.forEach((radioGroup) => {
+		resetRadioGroup(radioGroup);
+	});
+
+	/*
+	when a radio element is clicked
+	hide any error labels
+	ensure only relevant text inputs are showing and required
+	*/
+
+	radioElements.forEach((radioElement) => {
+		radioElement.onclick = () => {
+			// reset the radio group
+			const radioGroup = radioElement.closest(radioGroupsSelector);
+			resetRadioGroup(radioGroup);
+
+			// show the text input if needed
+			const nextEl = radioElement.nextElementSibling;
+			if (nextEl === null) return false;
+			if (nextEl.classList.contains("form__input-wrapper")) {
+				nextEl.querySelector("input").required = true;
+				nextEl.style.removeProperty("display");
+			}
+		};
+	});
+
+	/*
+	form validation
+	*/
+
+	// validate text inputs
+	function validateTextInputs(formInput) {
+		// check the validity
+		const isValid = formInput.checkValidity();
+
+		// format the input and return the validity
+		formInputErrors(formInput, isValid);
+		return isValid;
+	}
+
+	// validate radio inputs
+	function validateRadioGroup(radioGroup) {
+		const checked = radioGroup.querySelector('input[type="radio"]:checked'),
+			radioError = radioGroup.parentElement.querySelector(errorLabelsSelector);
+
+		// determine whether to hide or show the error message
+		if (checked) {
+			const radioError = radioGroup.parentElement.querySelector(
+				errorLabelsSelector
+			);
+			radioError.style.display = "none";
+		} else {
+			radioError.style.removeProperty("display");
+		}
+
+		return checked;
+	}
+
+	/*
+	run the form validation
+	*/
+
+	// validate when the user leaves inputs
+	formInputs.forEach((formInput) => {
+		formInput.addEventListener("focusout", (event) => {
+			const value = formInput.value.trim();
+			formInput.value = value;
+			validateTextInputs(formInput);
+		});
+	});
+
+	// validate when user clicks button
+	validateButtons.forEach((button) => {
+		button.onclick = () => {
+			// show the loading anim
+			loadingAnim(button, true);
+
+			// get a reference to the current form step
+			const formStep = button.closest(formStepsSelector),
+				formInputsToValidate = formStep.querySelectorAll(formInputsSelector),
+				radioGroupsToValidate = formStep.querySelectorAll(radioGroupsSelector);
+
+			// declare boolean for whether or not to move on, default to true
+			let validationPassed = true;
+
+			// validate each of the form inputs
+			formInputsToValidate.forEach((formInput) => {
+				const valid = validateTextInputs(formInput);
+				// update the validation passed boolean
+				if (!valid) {
+					validationPassed = false;
+				}
+			});
+
+			// validate the radio groups
+			radioGroupsToValidate.forEach((radioGroup) => {
+				const valid = validateRadioGroup(radioGroup);
+				// update the validation passed boolean
+				if (!valid) {
+					validationPassed = false;
+				}
+			});
+
+			/*
+			determine the next step
+			e.g. progress to following form step or send form
+			*/
+
+			const currentForm = button.closest("form"),
+				currentFormButtons = Array.from(
+					currentForm.querySelectorAll(validateButtonsSelector)
+				),
+				index = currentFormButtons.indexOf(button);
+
+			// either show the next form step or send the form
+			if (validationPassed && index !== currentFormButtons.length - 1) {
+				// inputs have passed validation and this is not the final form step
+				formStep.style.display = "none";
+				formStep.nextElementSibling.style.removeProperty("display");
+				loadingAnim(button, false);
+			} else if (validationPassed && index === currentFormButtons.length - 1) {
+				// inputs have passed validation and this is the final form step
+				// format the checkboxes for pardot
+				const formCheckboxes = currentForm.querySelectorAll(
+					".form__checkbox-wrapper"
+				);
+				formCheckboxes.forEach((formCheckbox) => {
+					// get the id and status of the checkbox
+					const checkboxId = formCheckbox.id,
+						checkboxInput = formCheckbox.nextElementSibling.querySelector(
+							"input"
+						),
+						checkboxStatus = formCheckbox.querySelector(
+							'input[type="checkbox"]:checked'
+						);
+
+					// assign the values to the text input
+					if (checkboxId !== "") {
+						checkboxInput.id = checkboxId;
+						checkboxInput.value = checkboxStatus;
+					}
+
+					// remove the id from the checkbox to ensure it isn't submitted
+					formCheckbox.querySelector("input").id = "";
+				});
+
+				// format the radio groups for pardot
+				radioGroups.forEach((radioGroup) => {
+					// get the id of the selected radio
+					const selectedRadio = radioGroup.querySelector(":checked"),
+						selectedRadioId = selectedRadio.id,
+						radioGroupInput = radioGroup.nextElementSibling.querySelector(
+							"input"
+						);
+
+					// assign the values to the text input
+					radioGroupInput.id = selectedRadioId;
+					radioGroupInput.name = selectedRadioId;
+				});
+
+				// find the name field and determine the next step
+				const userName = currentForm.querySelector('input[name="name"]');
+				if (userName.value !== "") {
+					currentForm.method = "get";
+					currentForm.submit();
+					return;
+				}
+
+				// get and decode the p-end attribute
+				const pEnd = atob(
+					currentForm.closest(modalWrapperSelector).getAttribute("data-p-end")
+				);
+
+				currentForm.method = "post";
+				currentForm.action =
+					currentForm.action === window.location.href
+						? pEnd
+						: currentForm.action;
+				// currentForm.submit();
+			} else if (!validationPassed) {
+				// inputs have not passed validation
+				loadingAnim(button, false);
+			}
+		};
+	});
+
+	// go to previous card when back button is clicked
+	backButtons.forEach((backButton) => {
+		backButton.onclick = () => {
+			// find the current form step
+			const currentForm = backButton.closest(formStepsSelector);
+			// hide the current form step and show the previous one
+			currentForm.style.display = "none";
+			currentForm.previousElementSibling.style.removeProperty("display");
+		};
+	});
+}
+
+if (document.readyState !== "loading") {
+	formatCallbackTriggers();
+	crunchForms();
+} else {
+	document.addEventListener("DOMContentLoaded", function () {
+		formatCallbackTriggers();
+		crunchForms();
+	});
+}
