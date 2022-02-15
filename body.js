@@ -244,49 +244,8 @@ function memberQuote() {
 	}
 }
 
-async function tooltips() {
-	const tooltip = document.getElementsByClassName("tooltip");
-	const pricingTooltip = document.querySelectorAll(
-		".pricing__feature .secondary-text"
-	);
-
-	const runFunction = tooltip.length > 0 || pricingTooltip.length > 0;
-
-	if (runFunction) {
-		const script = function () {
-			const pricingTooltip = $(".pricing__feature .secondary-text");
-			tippy(".tooltip", {
-				theme: "crunch",
-				arrow: document.getElementById("tippy-svg"),
-				zIndex: 9999999
-			});
-			if (pricingTooltip) {
-				tippy(".pricing__feature .secondary-text", {
-					theme: "crunch",
-					allowHTML: !0,
-					arrow: document.getElementById("tippy-svg"),
-					interactive: !0,
-					content: (reference) =>
-						$(reference).siblings(".tooltip__content").html()
-				});
-			}
-		};
-		createCode(
-			"css",
-			`.tippy-box[data-theme~='crunch']{background-color:#fff;color:#2e3138;padding:1.5em;border:1px solid #bfc6cb;border-radius:.375em;box-shadow:0 3px 6px 0 hsla(221.99999999999997,9.8%,20%,.16)}`
-		);
-
-		await loadJs("https://unpkg.com/@popperjs/core@2", null, document.body);
-		await loadJs("https://unpkg.com/tippy.js@6", script, document.body);
-		// await loadScript("body", "https://unpkg.com/@popperjs/core@2", null);
-		// await loadScript("body", "https://unpkg.com/tippy.js@6", null);
-		// await createCode("script", script);
-	}
-}
-
 document.addEventListener("DOMContentLoaded", function () {
 	memberQuote();
-	tooltips();
 });
 
 /* END */
