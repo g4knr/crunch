@@ -1,3 +1,5 @@
+console.log("codesandbox");
+
 /* CRUNCH */
 
 /*
@@ -560,12 +562,14 @@ function crunchForms() {
 			errorLabel.style.display = "none";
 		});
 
-		// hide the linked text input
+		// hide the linked text input if there is one
 		const radioInputs = radioGroup.querySelectorAll(inputWrapperSelector);
-		radioInputs.forEach((radioInput) => {
-			radioInput.style.display = "none";
-			radioInput.querySelector("input").required = false;
-		});
+		if (radioInputs.length !== 0) {
+			radioInputs.forEach((radioInput) => {
+				radioInput.style.display = "none";
+				radioInput.querySelector("input").required = false;
+			});
+		}
 	}
 
 	// function to show the loading animation
@@ -686,23 +690,27 @@ function crunchForms() {
 			// declare boolean for whether or not to move on, default to true
 			let validationPassed = true;
 
-			// validate each of the form inputs
-			formInputsToValidate.forEach((formInput) => {
-				const valid = validateTextInputs(formInput);
-				// update the validation passed boolean
-				if (!valid) {
-					validationPassed = false;
-				}
-			});
+			// validate each of the form inputs if there are any
+			if (formInputsToValidate.length !== 0) {
+				formInputsToValidate.forEach((formInput) => {
+					const valid = validateTextInputs(formInput);
+					// update the validation passed boolean
+					if (!valid) {
+						validationPassed = false;
+					}
+				});
+			}
 
-			// validate the radio groups
-			radioGroupsToValidate.forEach((radioGroup) => {
-				const valid = validateRadioGroup(radioGroup);
-				// update the validation passed boolean
-				if (!valid) {
-					validationPassed = false;
-				}
-			});
+			// validate the radio groups if there are any
+			if (radioGroupsToValidate.length !== 0) {
+				radioGroupsToValidate.forEach((radioGroup) => {
+					const valid = validateRadioGroup(radioGroup);
+					// update the validation passed boolean
+					if (!valid) {
+						validationPassed = false;
+					}
+				});
+			}
 
 			/*
 			determine the next step
@@ -723,48 +731,54 @@ function crunchForms() {
 				loadingAnim(button, false);
 			} else if (validationPassed && index === currentFormButtons.length - 1) {
 				// inputs have passed validation and this is the final form step
-				// format the checkboxes for pardot
+				// format the checkboxes for pardot if there are any
 				const formCheckboxes = currentForm.querySelectorAll(
 					".form__checkbox-wrapper"
 				);
-				formCheckboxes.forEach((formCheckbox) => {
-					// get the id and status of the checkbox
-					const checkboxId = formCheckbox.id,
-						checkboxInput = formCheckbox.nextElementSibling.querySelector(
-							"input"
-						),
-						checkboxStatus = formCheckbox.querySelector(
-							'input[type="checkbox"]:checked'
-						);
+				if (formCheckboxes.length !== 0) {
+					formCheckboxes.forEach((formCheckbox) => {
+						// get the id and status of the checkbox
+						const checkboxId = formCheckbox.id,
+							checkboxInput = formCheckbox.nextElementSibling.querySelector(
+								"input"
+							),
+							checkboxStatus = formCheckbox.querySelector(
+								'input[type="checkbox"]:checked'
+							);
 
-					// assign the values to the text input
-					if (checkboxId !== "") {
-						checkboxInput.id = checkboxId;
-						checkboxInput.value = checkboxStatus;
-					}
+						// assign the values to the text input
+						if (checkboxId !== "") {
+							checkboxInput.id = checkboxId;
+							checkboxInput.value = checkboxStatus;
+						}
 
-					// remove the id from the checkbox to ensure it isn't submitted
-					formCheckbox.querySelector("input").id = "";
-				});
+						// remove the id from the checkbox to ensure it isn't submitted
+						formCheckbox.querySelector("input").id = "";
+					});
+				}
 
-				// format the radio groups for pardot
-				radioGroups.forEach((radioGroup) => {
-					// get the id of the selected radio
-					const selectedRadio = radioGroup.querySelector(":checked"),
-						selectedRadioId = selectedRadio.id,
-						radioGroupInput = radioGroup.nextElementSibling.querySelector(
-							"input"
-						);
+				// format the radio groups for pardot if there are any
+				const formRadios = currentForm.querySelectorAll(radioGroupsSelector);
+				console.log(formRadios);
+				if (formRadios.length !== 0) {
+					formRadios.forEach((radioGroup) => {
+						// get the id of the selected radio
+						const selectedRadio = radioGroup.querySelector(":checked"),
+							selectedRadioId = selectedRadio.id,
+							radioGroupInput = radioGroup.nextElementSibling.querySelector(
+								"input"
+							);
 
-					// assign the values to the text input
-					radioGroupInput.id = selectedRadioId;
-					radioGroupInput.name = selectedRadioId;
-					
-					// reset the selected radio
-					selectedRadio.removeAttribute("name");
-					selectedRadio.removeAttribute("id");
-					selectedRadio.removeAttribute("value");
-				});
+						// assign the values to the text input
+						radioGroupInput.id = selectedRadioId;
+						radioGroupInput.name = selectedRadioId;
+
+						// reset the selected radio
+						selectedRadio.removeAttribute("name");
+						selectedRadio.removeAttribute("id");
+						selectedRadio.removeAttribute("value");
+					});
+				}
 
 				// find the name field and determine the next step
 				const userName = currentForm.querySelector('input[name="name"]');
@@ -793,15 +807,17 @@ function crunchForms() {
 	});
 
 	// go to previous card when back button is clicked
-	backButtons.forEach((backButton) => {
-		backButton.onclick = () => {
-			// find the current form step
-			const currentForm = backButton.closest(formStepsSelector);
-			// hide the current form step and show the previous one
-			currentForm.style.display = "none";
-			currentForm.previousElementSibling.style.removeProperty("display");
-		};
-	});
+	if (backButtons.length !== 0) {
+		backButtons.forEach((backButton) => {
+			backButton.onclick = () => {
+				// find the current form step
+				const currentForm = backButton.closest(formStepsSelector);
+				// hide the current form step and show the previous one
+				currentForm.style.display = "none";
+				currentForm.previousElementSibling.style.removeProperty("display");
+			};
+		});
+	}
 }
 
 if (document.readyState !== "loading") {
