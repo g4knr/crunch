@@ -624,7 +624,7 @@ function crunchForms() {
 			// show the text input if needed
 			const nextEl = radioElement.nextElementSibling;
 			if (nextEl === null) return false;
-			if (nextEl.classList.contains("form__input-wrapper")) {
+			if (nextEl.classList.contains(inputWrapperSelector)) {
 				nextEl.querySelector("input").required = true;
 				nextEl.style.removeProperty("display");
 			}
@@ -759,15 +759,14 @@ function crunchForms() {
 
 				// format the radio groups for pardot if there are any
 				const formRadios = currentForm.querySelectorAll(radioGroupsSelector);
-				console.log(formRadios);
 				if (formRadios.length !== 0) {
 					formRadios.forEach((radioGroup) => {
 						// get the id of the selected radio
 						const selectedRadio = radioGroup.querySelector(":checked"),
 							selectedRadioId = selectedRadio.id,
-							radioGroupInput = radioGroup.nextElementSibling.querySelector(
-								"input"
-							);
+							radioGroupInput = radioGroup
+								.closest(inputWrapperSelector)
+								.querySelector(".form__radio-submit input");
 
 						// assign the values to the text input
 						radioGroupInput.id = selectedRadioId;
@@ -790,8 +789,10 @@ function crunchForms() {
 
 				// get and decode the p-end attribute
 				const pEnd = atob(
-					currentForm.closest(modalWrapperSelector).getAttribute("data-p-end")
+					currentForm.closest("[data-p-end]").getAttribute("data-p-end")
 				);
+
+				console.log(pEnd);
 
 				currentForm.method = "post";
 				currentForm.action =
