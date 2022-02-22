@@ -759,19 +759,27 @@ function crunchForms() {
 				}
 
 				// format the radio groups for pardot if there are any
-				const formRadios = currentForm.querySelectorAll(radioGroupsSelector);
-				if (formRadios.length !== 0) {
-					formRadios.forEach((radioGroup) => {
+				const formRadioGroups = currentForm.querySelectorAll(
+					radioGroupsSelector
+				);
+				if (formRadioGroups.length !== 0) {
+					formRadioGroups.forEach((formRadioGroup) => {
 						// get the id of the selected radio
-						const selectedRadio = radioGroup.querySelector(":checked"),
-							selectedRadioId = selectedRadio.id,
-							radioGroupInput = radioGroup
+						const selectedRadio = formRadioGroup.querySelector(":checked"),
+							radioGroupInput = formRadioGroup
 								.closest(inputWrapperSelector)
 								.querySelector(".form__radio-submit input");
 
+						console.log(selectedRadio);
+
 						// assign the values to the text input
-						radioGroupInput.id = selectedRadioId;
-						radioGroupInput.name = selectedRadioId;
+						radioGroupInput.id = selectedRadio.getAttribute("data-name");
+						radioGroupInput.name = selectedRadio.getAttribute("data-name");
+						radioGroupInput.value = selectedRadio.value;
+
+						console.log(radioGroupInput);
+						console.log(radioGroupInput.id);
+						console.log(radioGroupInput.value);
 
 						// reset the selected radio
 						selectedRadio.removeAttribute("name");
@@ -800,7 +808,7 @@ function crunchForms() {
 					currentForm.action === window.location.href
 						? pEnd
 						: currentForm.action;
-				currentForm.submit();
+				// currentForm.submit();
 			} else if (!validationPassed) {
 				// inputs have not passed validation
 				loadingAnim(button, false);
