@@ -808,7 +808,7 @@ function crunchForms() {
 					currentForm.action === window.location.href
 						? pEnd
 						: currentForm.action;
-				// currentForm.submit();
+				currentForm.submit();
 			} else if (!validationPassed) {
 				// inputs have not passed validation
 				loadingAnim(button, false);
