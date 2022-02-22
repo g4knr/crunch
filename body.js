@@ -521,7 +521,8 @@ function crunchForms() {
 		radioElementsSelector = `${callbackFormSelector} .form__radio-element`,
 		validateButtonsSelector = `${callbackFormSelector} .button.is--validate`,
 		backButtonsSelector = `${callbackFormSelector} [data-form-el="back-button"]`,
-		inputWrapperSelector = ".form__input-wrapper";
+		inputWrapperClass = "form__input-wrapper",
+		inputWrapperSelector = `.${inputWrapperClass}`;
 
 	// reference elements
 	const callbackForms = document.querySelectorAll(callbackFormSelector),
@@ -624,7 +625,7 @@ function crunchForms() {
 			// show the text input if needed
 			const nextEl = radioElement.nextElementSibling;
 			if (nextEl === null) return false;
-			if (nextEl.classList.contains(inputWrapperSelector)) {
+			if (nextEl.classList.contains(inputWrapperClass)) {
 				nextEl.querySelector("input").required = true;
 				nextEl.style.removeProperty("display");
 			}
