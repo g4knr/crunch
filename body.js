@@ -1,4 +1,4 @@
-console.log("codesandbox");
+console.log("production");
 
 /* CRUNCH */
 
@@ -770,16 +770,10 @@ function crunchForms() {
 								.closest(inputWrapperSelector)
 								.querySelector(".form__radio-submit input");
 
-						console.log(selectedRadio);
-
 						// assign the values to the text input
 						radioGroupInput.id = selectedRadio.getAttribute("data-name");
 						radioGroupInput.name = selectedRadio.getAttribute("data-name");
 						radioGroupInput.value = selectedRadio.value;
-
-						console.log(radioGroupInput);
-						console.log(radioGroupInput.id);
-						console.log(radioGroupInput.value);
 
 						// reset the selected radio
 						selectedRadio.removeAttribute("name");
@@ -796,12 +790,10 @@ function crunchForms() {
 					return;
 				}
 
-				// get and decode the p-end attribute
-				const pEnd = atob(
-					currentForm.closest("[data-p-end]").getAttribute("data-p-end")
-				);
-
-				console.log(pEnd);
+				// get the endpoint
+				const pEnd = currentForm.closest("[data-p-end]")
+					? atob(currentForm.closest("[data-p-end]").getAttribute("data-p-end"))
+					: currentForm.action;
 
 				currentForm.method = "post";
 				currentForm.action =
