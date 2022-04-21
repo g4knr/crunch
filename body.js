@@ -800,6 +800,19 @@ function crunchForms() {
 					currentForm.action === window.location.href
 						? pEnd
 						: currentForm.action;
+
+				// create a hidden input for page info
+				let existingHiddenInput = currentForm.querySelector(
+					'input[name="originating_form"]'
+				);
+				let hiddenInput =
+					existingHiddenInput === null
+						? document.createElement("input")
+						: existingHiddenInput;
+				hiddenInput.setAttribute("type", "hidden");
+				hiddenInput.setAttribute("name", "originating_form");
+				hiddenInput.setAttribute("value", window.location.pathname);
+				currentForm.appendChild(hiddenInput);
 				currentForm.submit();
 			} else if (!validationPassed) {
 				// inputs have not passed validation
