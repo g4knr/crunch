@@ -835,12 +835,56 @@ function crunchForms() {
 	}
 }
 
+function idlePopup() {
+	let stopwatch;
+	let hasOpened = false;
+	window.addEventListener("load", resetTimer);
+	window.addEventListener("mousemove", resetTimer);
+	window.addEventListener("mousedown", resetTimer);
+	window.addEventListener("touchstart", resetTimer);
+	window.addEventListener("touchmove", resetTimer);
+	window.addEventListener("click", resetTimer);
+	window.addEventListener("keydown", resetTimer);
+	window.addEventListener("scroll", resetTimer, true);
+
+	const FAB = document.querySelector(".fab");
+	FAB.onclick = fabOpened;
+
+	function timeout() {
+		if (hasOpened) return;
+		if (FAB.parentElement.classList.contains("is--open")) return;
+
+		FAB.click();
+
+		window.removeEventListener("load", resetTimer, true);
+		window.removeEventListener("mousemove", resetTimer, true);
+		window.removeEventListener("mousedown", resetTimer, true);
+		window.removeEventListener("touchstart", resetTimer, true);
+		window.removeEventListener("touchmove", resetTimer, true);
+		window.removeEventListener("click", resetTimer, true);
+		window.removeEventListener("keydown", resetTimer, true);
+	}
+
+	function resetTimer() {
+		console.log("reset");
+		clearTimeout(stopwatch);
+		stopwatch = setTimeout(timeout, 5000);
+	}
+
+	function fabOpened() {
+		hasOpened = true;
+	}
+}
+
 if (document.readyState !== "loading") {
 	formatCallbackTriggers();
 	crunchForms();
+	idlePopup();
 } else {
 	document.addEventListener("DOMContentLoaded", function () {
 		formatCallbackTriggers();
 		crunchForms();
+		idlePopup();
 	});
 }
+
