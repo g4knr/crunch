@@ -836,8 +836,12 @@ function crunchForms() {
 }
 
 function idlePopup() {
+	let fabSave = "fabOpened";
+	let fabSaved = "true";
+	let hasOpened = sessionStorage.getItem(fabSave);
+	if (hasOpened === fabSaved) return;
+
 	let stopwatch;
-	let hasOpened = false;
 	window.addEventListener("load", resetTimer);
 	window.addEventListener("mousemove", resetTimer);
 	window.addEventListener("mousedown", resetTimer);
@@ -873,6 +877,7 @@ function idlePopup() {
 
 	function fabOpened() {
 		hasOpened = true;
+		sessionStorage.setItem(fabSave, fabSaved);
 	}
 }
 
