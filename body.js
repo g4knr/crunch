@@ -872,7 +872,7 @@ function idlePopup() {
 	function resetTimer() {
 		console.log("reset");
 		clearTimeout(stopwatch);
-		stopwatch = setTimeout(timeout, 5000);
+		stopwatch = setTimeout(timeout, 10000);
 	}
 
 	function fabOpened() {
