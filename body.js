@@ -543,8 +543,10 @@ function crunchForms() {
 		const errorLabel = formInput.parentElement.querySelector(
 			errorLabelsSelector
 		);
+		
+		if (!errorLabel) return
 
-		if (valid && errorLabel) {
+		if (valid) {
 			errorLabel.style.display = "none";
 		} else {
 			errorLabel.style.removeProperty("display");
